@@ -9,4 +9,5 @@ public class SafeboxDTO {
   String name;
   String password;
 
+
 }
