@@ -19,7 +19,7 @@ public class SafeboxController_v1 extends SafeboxController {
   SafeboxService safeboxService;
 
 
-  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "auth/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> getSafebox(@PathVariable String id,
                                       @RequestHeader(name = "X-Auth-Name") String authName,
                                       @RequestHeader(name = "X-Auth-Pwd") String authPwd) {
