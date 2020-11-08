@@ -1,12 +1,10 @@
 package com.securitish.safebox.com.repository.dao;
 
+import com.securitish.safebox.com.util.AttributeEncryptor;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Set;
 
 @Data
@@ -20,6 +18,7 @@ public class SafeboxDAO {
   String name;
   String password;
   @ElementCollection
+  @Convert(converter = AttributeEncryptor.class)
   Set<String> items;
 
 }
