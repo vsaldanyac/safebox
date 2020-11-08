@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/safebox")
 public class SafeboxController {
@@ -23,5 +25,17 @@ public class SafeboxController {
   public ResponseEntity<?> postNewSafeBox(@RequestBody final SafeboxDTO safebox) {
     SafeboxDTO safeboxRet = safeboxService.createSafebox(safebox);
     return ResponseEntity.ok(safeboxRet);
+  }
+
+  @PutMapping("/{id}/items")
+  public ResponseEntity<?> putItemsFromSafebox(@PathVariable String id, @RequestBody final List<String> safeboxItems) {
+    safeboxService.putItemsOnSafebox(id, safeboxItems);
+    return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/{id}/items")
+  public ResponseEntity<?> getItemsFromSafebox(@PathVariable String id) {
+
+    return ResponseEntity.ok(safeboxService.getItemsFromSafebox(id));
   }
 }

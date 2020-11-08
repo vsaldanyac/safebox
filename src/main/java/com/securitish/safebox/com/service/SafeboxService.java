@@ -8,7 +8,7 @@ public interface SafeboxService {
 
   SafeboxDTO createSafebox(SafeboxDTO safeboxDTO);
 
-  String putItemOnSafebox(String safeboxId, String item);
+  void putItemsOnSafebox(String safeboxId, List<String> item);
 
   List<String> getItemsFromSafebox(String safeboxId);
 }
