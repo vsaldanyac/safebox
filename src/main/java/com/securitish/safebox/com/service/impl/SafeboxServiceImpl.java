@@ -4,8 +4,8 @@ import com.securitish.safebox.com.dto.SafeboxDTO;
 import com.securitish.safebox.com.dto.mapper.SafeboxMapper;
 import com.securitish.safebox.com.exception.AuthNotMatchException;
 import com.securitish.safebox.com.exception.SafeboxNotFoundException;
-import com.securitish.safebox.com.repository.dao.SafeboxDAO;
 import com.securitish.safebox.com.repository.SafeboxRepository;
+import com.securitish.safebox.com.repository.dao.SafeboxDAO;
 import com.securitish.safebox.com.service.SafeboxService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +36,8 @@ public class SafeboxServiceImpl implements SafeboxService {
     if (safebox.isPresent()) {
       safebox.get().getItems().addAll(items);
       putSafebox(safebox.get());
+    } else {
+      throw new SafeboxNotFoundException();
     }
   }
 
