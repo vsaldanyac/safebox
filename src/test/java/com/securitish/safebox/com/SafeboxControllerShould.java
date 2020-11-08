@@ -36,7 +36,7 @@ public class SafeboxControllerShould {
 
   private String getSafeBoxIdForTest() throws Exception {
     ResultActions result
-        = mockMvc.perform(post("/safebox")
+        = mockMvc.perform(post("/beta/safebox")
         .content(VALID_SAFEBOX)
         .contentType("application/json;charset=UTF-8"))
         .andExpect(status().is2xxSuccessful())
@@ -49,14 +49,14 @@ public class SafeboxControllerShould {
 
   @Test
   public void shouldExistStatusRequest() throws Exception {
-    this.mockMvc.perform(get("/safebox/status")
+    this.mockMvc.perform(get("/beta/safebox/status")
     ).andExpect(status().is2xxSuccessful()
     );
   }
 
   @Test
   public void shouldExistCreateSafeboxRequest() throws Exception {
-    this.mockMvc.perform(post("/safebox")
+    this.mockMvc.perform(post("/beta/safebox")
         .content(VALID_SAFEBOX)
         .contentType("application/json;charset=UTF-8"))
         .andExpect(status().is2xxSuccessful()
@@ -67,7 +67,7 @@ public class SafeboxControllerShould {
   public void shouldExistGetItemsRequest() throws Exception {
     String safeboxId = getSafeBoxIdForTest();
 
-    this.mockMvc.perform(get(String.format("/safebox/%s/items", safeboxId))
+    this.mockMvc.perform(get(String.format("/beta/safebox/%s/items", safeboxId))
         .header("X-Auth-Name", VALID_USERNAME)
         .header("X-Auth-Pwd", VALID_PASSWORD)
     ).andExpect(status().is2xxSuccessful()
@@ -77,7 +77,7 @@ public class SafeboxControllerShould {
   @Test
   public void shouldReturnErrorOnGetItemsInvalidUsernameRequest() throws Exception {
     String safeboxId = getSafeBoxIdForTest();
-    this.mockMvc.perform(get(String.format("/safebox/%s/items", safeboxId))
+    this.mockMvc.perform(get(String.format("/beta/safebox/%s/items", safeboxId))
         .header("X-Auth-Name", INVALID_USERNAME)
         .header("X-Auth-Pwd", VALID_PASSWORD)
     ).andExpect(status().is4xxClientError()
@@ -87,7 +87,7 @@ public class SafeboxControllerShould {
   @Test
   public void shouldReturnErrorOnGetItemsInvalidPasswordRequest() throws Exception {
     String safeboxId = getSafeBoxIdForTest();
-    this.mockMvc.perform(get(String.format("/safebox/%s/items", safeboxId))
+    this.mockMvc.perform(get(String.format("/beta/safebox/%s/items", safeboxId))
         .header("X-Auth-Name", VALID_USERNAME)
         .header("X-Auth-Pwd", INVALID_PASSWORD)
     ).andExpect(status().is4xxClientError()
@@ -97,7 +97,7 @@ public class SafeboxControllerShould {
   @Test
   public void shouldExistPutItemsRequest() throws Exception {
     String safeboxId = getSafeBoxIdForTest();
-    this.mockMvc.perform(put(String.format("/safebox/%s/items", safeboxId))
+    this.mockMvc.perform(put(String.format("/beta/safebox/%s/items", safeboxId))
         .content(ITEMS_TO_INSERT)
         .contentType("application/json;charset=UTF-8")
         .header("X-Auth-Name", VALID_USERNAME)

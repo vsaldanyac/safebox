@@ -35,6 +35,8 @@ public class SafeboxApplication {
           .and().authorizeRequests()
           .antMatchers("/h2-console/**").permitAll()
           .antMatchers("/console/**").permitAll()
+          .and().authorizeRequests()
+          .antMatchers("/beta/**").permitAll()
           .anyRequest().authenticated();
 
       http.csrf().disable();

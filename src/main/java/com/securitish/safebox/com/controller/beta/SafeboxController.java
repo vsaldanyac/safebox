@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/safebox")
+@RequestMapping("/beta/safebox")
 public class SafeboxController {
 
   @Autowired
