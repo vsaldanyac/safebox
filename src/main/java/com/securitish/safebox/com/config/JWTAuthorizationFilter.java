@@ -1,9 +1,6 @@
 package com.securitish.safebox.com.config;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +21,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
     try {
-      if (existeJWTToken(request, response)) {
+      if (existsJWTToken(request, response)) {
         Claims claims = validateToken(request);
         if (claims.get("authorities") != null) {
           setUpSpringAuthentication(claims);
@@ -35,10 +32,9 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         SecurityContextHolder.clearContext();
       }
       chain.doFilter(request, response);
-    } catch (UnsupportedJwtException | MalformedJwtException e) {
+    } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
       response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-      ((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
-      return;
+      (response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
     }
   }
 
@@ -57,10 +53,8 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
   }
 
-  private boolean existeJWTToken(HttpServletRequest request, HttpServletResponse res) {
+  private boolean existsJWTToken(HttpServletRequest request, HttpServletResponse res) {
     String authenticationHeader = request.getHeader(HEADER);
-    if (authenticationHeader == null || !authenticationHeader.startsWith(PREFIX))
-      return false;
-    return true;
+    return authenticationHeader != null && authenticationHeader.startsWith(PREFIX);
   }
 }
