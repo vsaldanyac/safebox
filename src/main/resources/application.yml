@@ -1,3 +1,11 @@
 spring:
   jackson:
     default-property-inclusion: non_null
+  datasource:
+    url: jdbc:h2:mem:safebox
+    driverClassName: org.h2.Driver
+    username: h2
+    password:
+  h2:
+    console:
+      enabled: true
