@@ -28,14 +28,20 @@ public class SafeboxController {
   }
 
   @PutMapping("/{id}/items")
-  public ResponseEntity<?> putItemsFromSafebox(@PathVariable String id, @RequestBody final List<String> safeboxItems) {
+  public ResponseEntity<?> putItemsFromSafebox(@PathVariable String id,
+                                               @RequestBody final List<String> safeboxItems,
+                                               @RequestHeader(name = "X-Auth-Name") String authName,
+                                               @RequestHeader(name = "X-Auth-Pwd") String authPwd) {
+    safeboxService.validateUserForGiveSafebox(id, authName, authPwd);
     safeboxService.putItemsOnSafebox(id, safeboxItems);
     return ResponseEntity.ok().build();
   }
 
   @GetMapping("/{id}/items")
-  public ResponseEntity<?> getItemsFromSafebox(@PathVariable String id) {
-
+  public ResponseEntity<?> getItemsFromSafebox(@PathVariable String id,
+                                               @RequestHeader(name = "X-Auth-Name") String authName,
+                                               @RequestHeader(name = "X-Auth-Pwd") String authPwd) {
+    safeboxService.validateUserForGiveSafebox(id, authName, authPwd);
     return ResponseEntity.ok(safeboxService.getItemsFromSafebox(id));
   }
 }

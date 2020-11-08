@@ -11,4 +11,6 @@ public interface SafeboxService {
   void putItemsOnSafebox(String safeboxId, List<String> item);
 
   List<String> getItemsFromSafebox(String safeboxId);
+
+  void validateUserForGiveSafebox(String safeboxId, String name, String pwd);
 }
