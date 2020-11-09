@@ -29,6 +29,9 @@ public class ConditionalRejectionInterceptor extends HandlerInterceptorAdapter {
   }
 
   private boolean shouldReject(String requestUri) {
+    if(requestUri.contains("beta")){
+      return false;
+    }
     int errorNumber = errorService.get();
 
     return errorNumber > MAX_ERROR_NUMBER;
