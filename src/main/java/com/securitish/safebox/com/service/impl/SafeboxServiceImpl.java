@@ -3,10 +3,12 @@ package com.securitish.safebox.com.service.impl;
 import com.securitish.safebox.com.dto.SafeboxDTO;
 import com.securitish.safebox.com.dto.mapper.SafeboxMapper;
 import com.securitish.safebox.com.exception.AuthNotMatchException;
+import com.securitish.safebox.com.exception.PasswordNotStrongEnoughException;
 import com.securitish.safebox.com.exception.SafeboxNotFoundException;
 import com.securitish.safebox.com.repository.SafeboxRepository;
 import com.securitish.safebox.com.repository.dao.SafeboxDAO;
 import com.securitish.safebox.com.service.SafeboxService;
+import com.securitish.safebox.com.util.SecurityUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,9 @@ public class SafeboxServiceImpl implements SafeboxService {
    */
   @Override
   public SafeboxDTO createSafebox(SafeboxDTO safeboxDTO) {
+    if (!SecurityUtils.validateStrongPassword(safeboxDTO.getPassword())) {
+      throw new PasswordNotStrongEnoughException();
+    }
     SafeboxDAO safeboxDAO = putSafebox(safeboxMapper.mapDAO(safeboxDTO));
     return safeboxMapper.mapDAO(safeboxDAO);
   }
@@ -43,7 +48,7 @@ public class SafeboxServiceImpl implements SafeboxService {
    * Put items on a sandbox
    *
    * @param safeboxId given safebox id
-   * @param items items to be added to the safebox
+   * @param items     items to be added to the safebox
    */
   @Override
   public void putItemsOnSafebox(String safeboxId, List<String> items) {
@@ -77,8 +82,8 @@ public class SafeboxServiceImpl implements SafeboxService {
    * I could use Basic Auth, but when I though I've implemented this auth manually
    *
    * @param safeboxId given safeboxId
-   * @param name name of the owner of the given safeboxID
-   * @param pwd password without encoding of the given safeboxId
+   * @param name      name of the owner of the given safeboxID
+   * @param pwd       password without encoding of the given safeboxId
    */
   @Override
   public void validateUserForGiveSafebox(String safeboxId, String name, String pwd) {
@@ -111,4 +116,5 @@ public class SafeboxServiceImpl implements SafeboxService {
   private SafeboxDAO putSafebox(SafeboxDAO safeboxDAO) {
     return safeboxRepository.save(safeboxDAO);
   }
+
 }

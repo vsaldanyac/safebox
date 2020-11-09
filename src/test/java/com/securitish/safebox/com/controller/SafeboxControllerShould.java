@@ -24,12 +24,13 @@ public class SafeboxControllerShould {
 
   static final String INVALID_SAFEBOX_ID = "INVALID_SAFEBOX_ID";
   static final String VALID_USERNAME = "VALID_USERNAME";
-  static final String VALID_PASSWORD = "VALID_PASSWORD";
+  static final String VALID_PASSWORD = "VALID_Password*1234";
   static final String INVALID_USERNAME = "INVALID_USERNAME";
-  static final String INVALID_PASSWORD = "INVALID_PASSWORD";
-  static final String VALID_SAFEBOX = "{\"name\": \"VALID_USERNAME\", \"password\": \"VALID_PASSWORD\"}";
-  static final String SAFEBOX_WITH_NO_NAME = "{\"password\": \"VALID_PASSWORD\"}";
-  static final String SAFEBOX_WITH_EMPTY_NAME = "{\"name\": \"\", \"password\": \"VALID_PASSWORD\"}";
+  static final String INVALID_PASSWORD = "INVALID_Password*1234";
+  static final String SAFEBOX_WITH_PWD_NOT_STRONG = "{\"name\": \"VALID_USERNAME\", \"password\": \"1234\"}";
+  static final String VALID_SAFEBOX = "{\"name\": \"VALID_USERNAME\", \"password\": \"VALID_Password*1234\"}";
+  static final String SAFEBOX_WITH_NO_NAME = "{\"password\": \"VALID_Password*1234\"}";
+  static final String SAFEBOX_WITH_EMPTY_NAME = "{\"name\": \"\", \"password\": \"VALID_Password*1234\"}";
   static final String ITEMS_TO_INSERT = "[\"Safebox Item 1\", \"Safebox Item 2\",\"Safebox Item 3\"]";
 
   @Autowired
@@ -188,5 +189,14 @@ public class SafeboxControllerShould {
     } catch (Exception e) {
       assertEquals(e.getClass(), NestedServletException.class);
     }
+  }
+
+  @Test
+  public void shouldNotAllowPasswordNotStrongEnough() throws Exception {
+    this.mockMvc.perform(post("/beta/safebox")
+        .content(SAFEBOX_WITH_PWD_NOT_STRONG)
+        .contentType("application/json;charset=UTF-8"))
+        .andExpect(status().is4xxClientError()
+        );
   }
 }
