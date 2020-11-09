@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 /**
@@ -21,6 +22,8 @@ public class SafeboxDAO {
   @GeneratedValue(generator = "uuid")
   @GenericGenerator(name = "uuid", strategy = "uuid2")
   String id;
+  @Column(nullable = false)
+  @NotEmpty
   String name;
   String password;
   @ElementCollection

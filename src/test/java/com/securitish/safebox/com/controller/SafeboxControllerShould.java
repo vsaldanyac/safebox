@@ -9,7 +9,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.util.NestedServletException;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -26,6 +28,8 @@ public class SafeboxControllerShould {
   static final String INVALID_USERNAME = "INVALID_USERNAME";
   static final String INVALID_PASSWORD = "INVALID_PASSWORD";
   static final String VALID_SAFEBOX = "{\"name\": \"VALID_USERNAME\", \"password\": \"VALID_PASSWORD\"}";
+  static final String SAFEBOX_WITH_NO_NAME = "{\"password\": \"VALID_PASSWORD\"}";
+  static final String SAFEBOX_WITH_EMPTY_NAME = "{\"name\": \"\", \"password\": \"VALID_PASSWORD\"}";
   static final String ITEMS_TO_INSERT = "[\"Safebox Item 1\", \"Safebox Item 2\",\"Safebox Item 3\"]";
 
   @Autowired
@@ -156,5 +160,33 @@ public class SafeboxControllerShould {
         .header("Authorization", token)
     ).andExpect(status().is2xxSuccessful()
     );
+  }
+
+  @Test
+  public void shouldNotAllowStoreSafeboxWithEmptyName() {
+    try {
+      this.mockMvc.perform(post("/beta/safebox")
+          .content(SAFEBOX_WITH_EMPTY_NAME)
+          .contentType("application/json;charset=UTF-8"))
+          .andExpect(status().is5xxServerError()
+          );
+    } catch (
+        Exception e) {
+      assertEquals(e.getClass(), NestedServletException.class);
+    }
+
+  }
+
+  @Test
+  public void shouldNotAllowStoreSafeboxWithNullName() {
+    try {
+      this.mockMvc.perform(post("/beta/safebox")
+          .content(SAFEBOX_WITH_NO_NAME)
+          .contentType("application/json;charset=UTF-8"))
+          .andExpect(status().is5xxServerError()
+          );
+    } catch (Exception e) {
+      assertEquals(e.getClass(), NestedServletException.class);
+    }
   }
 }
