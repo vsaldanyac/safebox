@@ -64,7 +64,7 @@ public class SafeboxServiceImpl implements SafeboxService {
   }
 
 
-  private Optional<SafeboxDAO> getSafebox(String safeboxId) {
+  public Optional<SafeboxDAO> getSafebox(String safeboxId) {
     return safeboxRepository.findById(safeboxId);
   }
 

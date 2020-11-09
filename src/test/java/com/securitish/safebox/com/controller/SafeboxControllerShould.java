@@ -1,5 +1,6 @@
-package com.securitish.safebox.com;
+package com.securitish.safebox.com.controller;
 
+import com.securitish.safebox.com.util.SecurityUtils;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -18,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class SafeboxControllerShould {
 
+  static final String INVALID_SAFEBOX_ID = "INVALID_SAFEBOX_ID";
   static final String VALID_USERNAME = "VALID_USERNAME";
   static final String VALID_PASSWORD = "VALID_PASSWORD";
   static final String INVALID_USERNAME = "INVALID_USERNAME";
@@ -45,6 +48,19 @@ public class SafeboxControllerShould {
     String resultString = result.andReturn().getResponse().getContentAsString();
     JacksonJsonParser jsonParser = new JacksonJsonParser();
     return jsonParser.parseMap(resultString).get("id").toString();
+  }
+
+  private String getValidToken(String safeboxId) throws Exception {
+    ResultActions result
+        = this.mockMvc.perform(get(String.format("/v1/safebox/%s/auth", safeboxId))
+        .header("X-Auth-Name", VALID_USERNAME)
+        .header("X-Auth-Pwd", VALID_PASSWORD)
+    ).andExpect(status().is2xxSuccessful()
+    ).andExpect(content().contentType("application/json"));
+
+    String resultString = result.andReturn().getResponse().getContentAsString();
+    JacksonJsonParser jsonParser = new JacksonJsonParser();
+    return jsonParser.parseMap(resultString).get("token").toString();
   }
 
   @Test
@@ -102,6 +118,42 @@ public class SafeboxControllerShould {
         .contentType("application/json;charset=UTF-8")
         .header("X-Auth-Name", VALID_USERNAME)
         .header("X-Auth-Pwd", VALID_PASSWORD)
+    ).andExpect(status().is2xxSuccessful()
+    );
+  }
+
+  @Test
+  public void shouldReturnValidToken() throws Exception {
+    String safeboxId = getSafeBoxIdForTest();
+    String token = getValidToken(safeboxId);
+    assertTrue(token.contains(SecurityUtils.PREFIX));
+  }
+
+  @Test
+  public void shouldNotReturnValidTokenIfInvalidSafeboxId() throws Exception {
+    this.mockMvc.perform(get(String.format("/v1/safebox/%s/auth", INVALID_SAFEBOX_ID))
+        .header("X-Auth-Name", VALID_USERNAME)
+        .header("X-Auth-Pwd", VALID_PASSWORD)
+    ).andExpect(status().is4xxClientError()
+    );
+  }
+
+  @Test
+  public void shouldNotReturnValidTokenIfInvalidUser() throws Exception {
+    String safeboxId = getSafeBoxIdForTest();
+    this.mockMvc.perform(get(String.format("/v1/safebox/%s/auth", safeboxId))
+        .header("X-Auth-Name", INVALID_USERNAME)
+        .header("X-Auth-Pwd", INVALID_PASSWORD)
+    ).andExpect(status().is4xxClientError()
+    );
+  }
+
+  @Test
+  public void shouldExistGetItemsRequestV1WithToken() throws Exception {
+    String safeboxId = getSafeBoxIdForTest();
+    String token = getValidToken(safeboxId);
+    this.mockMvc.perform(get(String.format("/v1/safebox/%s/items", safeboxId))
+        .header("Authorization", token)
     ).andExpect(status().is2xxSuccessful()
     );
   }
