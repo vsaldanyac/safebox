@@ -16,7 +16,7 @@ public class ErrorServiceImpl implements ErrorService {
   private Map<String, Integer> errorNumber = new HashMap<>();
 
   public synchronized int get() {
-    return errorNumber.get(ERROR);
+    return errorNumber.containsKey(ERROR) ? errorNumber.get(ERROR) : 0;
   }
 
   public synchronized void reset() {
