@@ -17,7 +17,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .addFilterAfter(new JWTAuthorizationFilter(getApplicationContext()), UsernamePasswordAuthenticationFilter.class)
         .authorizeRequests()
         .antMatchers(HttpMethod.POST, "/v1/safebox/").permitAll()
-        .antMatchers(HttpMethod.GET, "/v1/safebox/auth/**").permitAll()
+        .antMatchers(HttpMethod.GET, "/v1/safebox/**/auth").permitAll()
         .antMatchers("/beta/**").permitAll()
         .and().authorizeRequests()
         .antMatchers("/swagger-ui.html#").permitAll()
