@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import static com.securitish.safebox.com.util.SecurityUtils.MAX_ERROR_NUMBER;
 
+/**
+ * Interceptor to block everything (except Beta endpoints) if there are more than three errors
+ */
 @Component
 public class ConditionalRejectionInterceptor extends HandlerInterceptorAdapter {
 

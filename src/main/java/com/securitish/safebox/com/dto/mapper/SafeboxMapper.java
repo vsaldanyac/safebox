@@ -8,6 +8,12 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
+/**
+ * @author VSaldanya
+ * Mapper to convert Safebox classes between layers.
+ * Domain layer is never used
+ * To Store a Safebox, the password is encoded with md5Hex
+ */
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface SafeboxMapper {
 

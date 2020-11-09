@@ -19,6 +19,10 @@ import java.util.stream.Collectors;
 
 import static com.securitish.safebox.com.util.SecurityUtils.*;
 
+/**
+ * @author VSaldanya
+ * Store the number of errors and reset it
+ */
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
   ErrorService errorService;

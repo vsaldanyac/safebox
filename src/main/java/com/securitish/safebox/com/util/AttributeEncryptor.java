@@ -11,6 +11,10 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.util.Base64;
 
+/**
+ * @author VSaldanya
+ * Class to encrypt the attribute "items" of the sandbox
+ */
 @Component
 public class AttributeEncryptor implements AttributeConverter<String, String> {
 

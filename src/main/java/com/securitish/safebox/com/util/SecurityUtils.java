@@ -9,6 +9,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author VSaldanya
+ * Some properties and methods for security
+ * Expiration Time of a given token: 3 minutes
+ * Maximum number of consecutive errors requestin token: 3
+ * Token prefix "Bearer " as a silent convention
+ *
+ */
 public class SecurityUtils {
   public static final String HEADER = "Authorization";
   public static final String PREFIX = "Bearer ";

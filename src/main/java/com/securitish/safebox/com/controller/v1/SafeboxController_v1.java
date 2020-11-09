@@ -11,6 +11,9 @@ import java.util.List;
 
 import static com.securitish.safebox.com.util.SecurityUtils.getJWTToken;
 
+/**
+ * @author VSaldanya
+ */
 @RestController
 @RequestMapping("v1/safebox")
 public class SafeboxController_v1 extends SafeboxController {
@@ -18,7 +21,14 @@ public class SafeboxController_v1 extends SafeboxController {
   @Autowired
   SafeboxService safeboxService;
 
-
+  /**
+   * Enpoint to get token auth
+   *
+   * @param id       safebox id
+   * @param authName name of the safebox owner
+   * @param authPwd  password of the safebox owner
+   * @return Auth token
+   */
   @GetMapping(value = "{id}/auth", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> getSafebox(@PathVariable String id,
                                       @RequestHeader(name = "X-Auth-Name") String authName,
@@ -28,9 +38,18 @@ public class SafeboxController_v1 extends SafeboxController {
     return ResponseEntity.ok(new StringResponse(token));
   }
 
+  /**
+   * Endpoint to add items to a safebox
+   *
+   * @param id       safebox id
+   * @param safeboxItems Items to be added to the safebox
+   * @param authName name of the safebox owner not required (only for extends beta version)
+   * @param authPwd  password of the safebox owner (only for extends beta version)
+   * @return 200
+   */
   @Override
   @PutMapping("/{id}/items")
-  public ResponseEntity<?> putItemsFromSafebox(@PathVariable String id,
+  public ResponseEntity<?> putItemsToSafebox(@PathVariable String id,
                                                @RequestBody final List<String> safeboxItems,
                                                @RequestHeader(name = "X-Auth-Name", required = false) String authName,
                                                @RequestHeader(name = "X-Auth-Pwd", required = false) String authPwd) {
@@ -38,6 +57,14 @@ public class SafeboxController_v1 extends SafeboxController {
     return ResponseEntity.ok().build();
   }
 
+  /**
+   * Endpoint to get items from a given sandbox
+   *
+   * @param id       safebox id
+   * @param authName name of the safebox owner (only for extends beta version)
+   * @param authPwd  password of the safebox owner (only for extends beta version)
+   * @return items inside the safebox
+   */
   @Override
   @GetMapping("/{id}/items")
   public ResponseEntity<?> getItemsFromSafebox(@PathVariable String id,

@@ -7,6 +7,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * @author VSaldanya
+ * Class to configure security with access token
+ * Is allowed to post a new safebox
+ * Is allowed to get a valid token
+ * All beta endpoints are allowed
+ * Swagger is allowed
+ * h2-console is allowed
+ */
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
