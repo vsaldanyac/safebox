@@ -1,6 +1,9 @@
 package com.securitish.safebox.com.config;
 
+import com.securitish.safebox.com.service.ErrorService;
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +21,12 @@ import static com.securitish.safebox.com.util.SecurityUtils.*;
 
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
+  ErrorService errorService;
+
+  public JWTAuthorizationFilter(ApplicationContext ctx) {
+    this.errorService = ctx.getBean(ErrorService.class);
+  }
+
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
     try {
@@ -32,7 +41,9 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         SecurityContextHolder.clearContext();
       }
       chain.doFilter(request, response);
+      errorService.reset();
     } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
+      errorService.add();
       response.setStatus(HttpServletResponse.SC_FORBIDDEN);
       (response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
     }

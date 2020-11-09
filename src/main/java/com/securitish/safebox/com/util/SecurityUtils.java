@@ -14,6 +14,7 @@ public class SecurityUtils {
   public static final String PREFIX = "Bearer ";
   public static final String SECRET = "security-ish_safebox";
   public static final long EXPIRATION_TIME = 180000;
+  public static final int MAX_ERROR_NUMBER = 3;
 
 
   public static String getJWTToken(String username) {
