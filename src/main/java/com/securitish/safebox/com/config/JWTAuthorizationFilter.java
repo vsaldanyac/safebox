@@ -2,7 +2,6 @@ package com.securitish.safebox.com.config;
 
 import com.securitish.safebox.com.service.ErrorService;
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
